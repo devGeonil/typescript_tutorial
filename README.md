@@ -37,8 +37,26 @@ Learning Typescript by making a Blockchain with it
 const name = "geonil",
   age = 27,
   gender = "maile";
-const sayHi = (name, age, gender?) => {
+const sayHi = (name:string, age:number, gender:string):void => {
   console.log(`Hello ${name}, you are ${age}, you are a ${gender}`);
 }
 sayHi(name,age);
 export {};
+
+
+2)npm install ts-watch --save-dev
+2-1)package.json 내부 수정 합니다.
+2-2)npm start: "tsc-watch --onSuccess \"node dist/index.js\"   "
+2-3)dist + src 폴더 생성합니다.
+2-4)src 내부로 index.ts 파일 이동
+2-5)tsconfig 수정합니다.
+  {
+    "compilerOptions":{
+      "module":"commonjs",
+      "target":"ES2015",
+      "sourceMap":true,
+      "outDir":"dist"  <--- 모든 파일은 이리로 들어가고
+    },
+    "include":["src/**/*"], <-- scr 폴더에 있는 모든 것이 컴파일된다
+    "exclude":["node_modules"]
+  }
