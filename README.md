@@ -28,3 +28,17 @@ Learning Typescript by making a Blockchain with it
   "start":"node index.js",
   "prestart":"tsc"
 }
+
+-------------------------------------------------
+
+1) Typed 언어!!
+= 어떤 종류의 변수와 데이터 인지 설명 해줘야 한다!
+
+const name = "geonil",
+  age = 27,
+  gender = "maile";
+const sayHi = (name, age, gender?) => {
+  console.log(`Hello ${name}, you are ${age}, you are a ${gender}`);
+}
+sayHi(name,age);
+export {};
