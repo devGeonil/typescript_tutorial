@@ -133,3 +133,126 @@ script:{
 
   </code>
 </pre>
+
+
+### 5) Typescrupt Bit Coin from now on
+##### = 블록체인은 블록의 연결을 의미 한다.
+<pre>
+  <code>
+  class Block{
+    public index:number;
+    public hash:string;
+    public previousHash:string;
+    public data:string;
+    public timestamp:number;
+
+    constructor(index:number,hash:string,previousHash:string,data:string,timestamp:number){
+      this.index = index;
+      this.hash = hash;
+      this.previousHash = previousHash;
+      this.data = data;
+      this.timestamp = timestamp;
+    }
+  }
+
+  const genesisBlock:Block = new Block(0,"132498374229872","","Hello",123456);
+
+  let blockchain:Block[] = [genesisBlock];
+  //다음과 같이 작성 하게 되면, Block type이 아니기 때문에 push 할 수 없다.
+  blockchain.push("something")
+  console.log(blockchain);
+
+  export {};
+
+  </code>
+</pre>
+
+### 6) 블록 체인의 확장
+>6-1) npm install crypto-js<br>
+>6-2)  impot * as CryptoJS from "crypto-js" 타입스크립트 import 방법<br>
+<pre>
+  <code>
+  import * as CryptoJS from "crypto-js";
+
+  class Block{
+    public index:number;
+    public hash:string;
+    public previousHash:string;
+    public data:string;
+    public timestamp:number;
+
+    constructor(index:number,hash:string,previousHash:string,data:string,timestamp:number){
+      this.index = index;
+      this.hash = hash;
+      this.previousHash = previousHash;
+      this.data = data;
+      this.timestamp = timestamp;
+    }
+
+
+  //static methodsS
+  static calculateBlockHash = (index:number, previousHash:string, timestamp:number, data:string):string => CryptoJS.SHA256(index+previousHash+timestamp+data).toString();
+  static validateStructure = (aBlock:Block):boolean => typeof aBlock.index === "number" && typeof aBlock.hash === "string" && typeof aBlock.previousHash === "string" && typeof aBlock.timestamp === "number" && typeof aBlock.data === "string";
+  }
+
+
+  const genesisBlock:Block = new Block(0,"132498374229872","","Hello",123456);
+
+  let blockchain:Block[] = [genesisBlock];
+
+  const getBlockchain = ():Block[] => blockchain;
+  const getLatestBlock = ():Block => getBlockchain()[getBlockchain().length-1];
+  const getNewTimeStamp = ():number => Math.round(new Date().getTime() / 1000);
+  const createNewBlock = (data:string):Block => {
+    const previousBlock:Block = getLatestBlock();
+    const newIndex:number = previousBlock.index + 1;
+    const newTimestamp:number = getNewTimeStamp();
+    const newHash:string = Block.calculateBlockHash(newIndex, previousBlock.hash, newTimestamp, data);
+    const newBlock:Block = new Block(newIndex, newHash, previousBlock.hash, data, newTimestamp);
+    addBlock(newBlock);
+    return newBlock;
+  }
+
+
+  const getHashforBlock = (aBlock:Block):string => Block.calculateBlockHash(aBlock.index, aBlock.previousHash, aBlock.timestamp, aBlock.data);
+
+  //블록을 검증하는 함수
+  const isBlockValid = (candidateBlock:Block, previousBlock:Block):Boolean =>{
+    if(!Block.validateStructure(candidateBlock)){
+      console.log(1)
+      return false;
+    }else if(previousBlock.index + 1 !== candidateBlock.index){
+      console.log(2)
+      return false;
+    }else if(previousBlock.hash !== candidateBlock.previousHash){
+      console.log(3)
+      return false;
+    }else if(getHashforBlock(candidateBlock) !== candidateBlock.hash){
+      console.log(4)
+      return false;
+    }else{
+      return true;
+    }
+  }
+
+  //블록을 체인에 추가 하는 함수
+  const addBlock = (candidateBlock:Block):void =>{
+    if(isBlockValid(candidateBlock, getLatestBlock())){
+      blockchain.push(candidateBlock);
+    }else{console.log("error")}
+  }
+
+  createNewBlock("second Block");
+  createNewBlock("third Block");
+  createNewBlock("forth Block");
+
+
+
+
+  console.log(blockchain);
+
+
+  export {};
+
+  </code>
+</pre>
