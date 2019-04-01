@@ -10,7 +10,7 @@
     "type": "git",
     "url": "git+https://github.com/devGeonil/typescript_tutorial.git"
   },
-  "author": "",
+  "author": "", 
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/devGeonil/typescript_tutorial/issues"

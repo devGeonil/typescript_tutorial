@@ -1,5 +1,6 @@
 import * as CryptoJS from "crypto-js";
 
+
 class Block{
   public index:number;
   public hash:string;
